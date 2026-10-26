@@ -28,5 +28,5 @@ While this was a collaborative effort encompassing end-to-end machine learning e
 The final challenge submission replaces greedy, axis-aligned Decision Trees with a highly tuned Histogram-based Gradient Boosting (HistGB) ensemble.
 
 - **Feature Representation:** Audio is processed into 1-second windows with a 0.5s hop size. Each window is represented by a 960-dimensional vector aggregating the mean, standard deviation, min, and max of base acoustic features (MFCCs, Spectral Flux, Rolloff, etc.).
-- **Multi-Label Classification:** Using a Binary Relevance wrapper, 15 independent HistGB models are trained (one per class).
+- **Multi-Label Classification:** Using a Binary Relevance wrapper, 15 independent HistGB models are trained (one per class). 
 - **Threshold
