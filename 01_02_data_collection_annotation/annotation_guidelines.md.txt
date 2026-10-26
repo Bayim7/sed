@@ -1,0 +1,6 @@
+After the data collection stage, in which we recorded the audio, we annotated the data. For this task, we used Label Studio, 
+a platform for data labeling and evaluation. There, we were able to establish the ground truth by comparing the audio 
+descriptions of onset and offset times with what was actually in the recordings.
+
+A key feature we looked out for was **polyphony**: multiple sound events occurring simultaneously. 
+This would play a part in model selection and training, since overlapping events make the task a multi-label problem.

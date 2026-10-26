@@ -1,0 +1,46 @@
+# Verify Annotations & Qualitative Analysis
+
+**Ibrahim and Amr**
+
+## Verification
+
+We reviewed 10 recordings in Label Studio, comparing annotators' labels, checking class assignments and onset/offset precision, enforcing the one-second pause rule, 
+and flagging missed events. Incorrect annotations were corrected where possible; ambiguous cases were commented on and accepted.
+
+**Main disagreements:**
+- Most were about temporal boundaries (onsets and offsets), often involving violations of the one-second rule.
+- Common causes were short or faint sounds, heavily overlapping events, and transitions between similar sources (e.g., toilet refilling vs. running water).
+- Some audible target classes were neither annotated nor listed in the metadata. In file 003679, for example, footsteps were audible throughout but missing from both.
+
+## Annotator Agreement
+
+- **Overall:** mean Cohen's kappa of **0.788** across 5,735 annotator pairs, which is substantial agreement on the Landis & Koch scale.
+- **Lowest:** `footsteps` (0.770), `door_open_close` (0.839), `light_switch` (0.898), all short events with ambiguous boundaries.
+- **Highest:** `coffee_machine` (0.983), `vacuum_cleaner` (0.981), `bell_ringing` (0.979), all sustained and acoustically distinct.
+- **Recording owner effect:** pairs involving the owner agree slightly more (κ = 0.792 vs. 0.776).
+- **Metadata match:** all uploader-tagged classes appear in the annotations in 85.6% of files.
+
+## Label Construction
+
+Each annotator's overlap value is binarized at 0.5, then labels are decided by majority vote across annotators (≥ 0.5). With two annotators, 
+ties resolve as positive, which slightly biases labels toward "present". Shared annotator errors are preserved.
+
+## Dataset Characteristics
+
+- **Size:** 168,239 segments (~46.7 hours).
+- **Class imbalance:** `footsteps` is the most frequent class (1,815 files, 15.3% of total time) and `bell_ringing` the rarest (276 files, 1.5%).
+- **Durations:** sustained sounds are long (`vacuum_cleaner` median 32 s), while transients are short (`light_switch` 2 s).
+- **Features:** 960 dimensions (14 base features × 4 aggregations). Scales vary widely, so standardization is essential.
+- **Feature profiles:** `vacuum_cleaner` has the highest energy, `running_water` the highest `zcr` and `flatness`, and `microwave` a low `centroid`. `footsteps` and `keyboard_typing` look alike and are hard to separate.
+- **t-SNE:** sustained sounds (`vacuum_cleaner`, `running_water`) form clear clusters, while transients (`footsteps`, `light_switch`) overlap diffusely.
+
+## Biases and Limitations
+
+1. **Device bias:** a few smartphone models dominate, so classifiers may learn device characteristics.
+2. **Environment bias:** classes are tied to rooms (e.g., `running_water` to kitchens), so models may learn room acoustics.
+3. **Annotator bias:** with mostly two annotators per file, systematic errors flow directly into the labels.
+
+## Conclusion
+
+The dataset is suitable for training sound event detectors, but it needs handling for class imbalance, feature normalization, and label noise near the boundaries of transient events. 
+Because it is a domestic sound dataset, the license should explicitly prohibit surveillance use.

@@ -28,5 +28,22 @@ While this was a collaborative effort encompassing end-to-end machine learning e
 The final challenge submission replaces greedy, axis-aligned Decision Trees with a highly tuned Histogram-based Gradient Boosting (HistGB) ensemble.
 
 - **Feature Representation:** Audio is processed into 1-second windows with a 0.5s hop size. Each window is represented by a 960-dimensional vector aggregating the mean, standard deviation, min, and max of base acoustic features (MFCCs, Spectral Flux, Rolloff, etc.).
-- **Multi-Label Classification:** Using a Binary Relevance wrapper, 15 independent HistGB models are trained (one per class). 
-- **Threshold
+- **Multi-Label Classification:** Using a Binary Relevance wrapper, 15 independent HistGB models are trained (one per class).
+- **Threshold Calibration:** Because rare-class posteriors sit far below the default 0.5 decision boundary, per-class thresholds were rigorously tuned on the validation set, unlocking massive gains for transient events.
+- **Temporal Refinement:** A sliding Median Filter ($w=3$) was evaluated over the prediction timeline to vote out isolated false positives and bridge temporal gaps in continuous sounds.
+
+## 📊 Key Results & Insights
+
+- **+64% Performance Lift:** The tuned HistGB pipeline achieved a Test Macro-F1 of **0.545**, massively outperforming the baseline Decision Tree (0.316) and completely clearing the empirical prior floor (0.053).
+- **The Transient Bottleneck:** Discovered that while gradient boosting easily detects sustained broadband sounds (vacuum, running water), 1-second temporal aggregation inherently washes out brief transients (light switch clicks, door shutting). This proved that the input representation, rather than model capacity, was the true limiting factor.
+- **Deep Learning Extensions:** Explored raw-waveform and log-mel spectrogram architectures (CNNs, CRNNs, and a frozen Audio Spectrogram Transformer) to successfully bypass the aggregation bottleneck, pushing performance to ~**0.605** Macro-F1.
+
+## 🛠 Technologies & Tools
+
+- **Languages:** Python
+- **Machine Learning:** scikit-learn, XGBoost, HistGradientBoosting
+- **Audio Processing:** Librosa, FFmpeg
+- **Evaluation & Visualization:** Matplotlib, Seaborn, Pandas, t-SNE
+- **Documentation:** LaTeX, Overleaf
+
+> **Note:** The raw audio dataset and proprietary hidden test labels are restricted by course licensing and are not included in this repository. The provided `.npz` feature files and metadata can be used to reproduce the classification pipeline.
